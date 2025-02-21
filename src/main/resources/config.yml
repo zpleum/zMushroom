@@ -5,27 +5,27 @@ enable-world: "Sakura"
 
 materials:
   workshop_six:red_mushroom_patch_large:
-    command: "mmoitems give MATERIAL MUSHROOM_LV3 %player% 1"
+    command: "mmoitems give MATERIAL MUSHROOM_LV3 %player% 1 0 100 0 silent"
     cooldown-time: 10
     success-rate: 50.0
   workshop_six:red_mushroom_patch:
-    command: "mmoitems give MATERIAL MUSHROOM_LV3 %player% 1"
+    command: "mmoitems give MATERIAL MUSHROOM_LV3 %player% 1 0 100 0 silent"
     cooldown-time: 10
     success-rate: 55.0
   workshop_six:glow_mushroom_patch_large:
-    command: "mmoitems give MATERIAL MUSHROOM_LV2 %player% 1"
+    command: "mmoitems give MATERIAL MUSHROOM_LV2 %player% 1 0 100 0 silent"
     cooldown-time: 5
     success-rate: 65.0
   workshop_six:glow_mushroom_patch:
-    command: "mmoitems give MATERIAL MUSHROOM_LV2 %player% 1"
+    command: "mmoitems give MATERIAL MUSHROOM_LV2 %player% 1 0 100 0 silent"
     cooldown-time: 5
     success-rate: 70.0
   workshop_six:orange_mushroom_patch_large:
-    command: "mmoitems give MATERIAL MUSHROOM_LV1 %player% 1"
+    command: "mmoitems give MATERIAL MUSHROOM_LV1 %player% 1 0 100 0 silent"
     cooldown-time: 3
     success-rate: 80.0
   workshop_six:orange_mushroom_patch:
-    command: "mmoitems give MATERIAL MUSHROOM_LV1 %player% 1"
+    command: "mmoitems give MATERIAL MUSHROOM_LV1 %player% 1 0 100 0 silent"
     cooldown-time: 3
     success-rate: 85.0
 
@@ -47,7 +47,7 @@ harvest-messages:
   fail-title: "§cคุณเผลอทำเห็ดหลุดมือ!"
   fail-subtitle: "§eคราวหลังก็ระวังด้วยล่ะ!"
   cooldown-title: "§cเห็ดกำลังโต! กลับมาในภายหลังนะ"
-  cooldown-subtitle: "§eเหลือเวลาอีก: %time%"
+  cooldown-subtitle: "§eเห็ดจะโตในอีก: %time%"
   already-harvesting-title: "§cคุณเก็บเห็ดได้ทีละต้นเท่านั้นนะ!"
   already-harvesting-subtitle: "§eคุณกำลังเก็บเห็ดอีกต้นอยู่แล้ว!"
   active-player-title: "§cมีคุณกำลังเก็บเห็ดต้นนี้อยู่แล้ว!"
