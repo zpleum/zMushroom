@@ -1,0 +1,18 @@
+name: zMushroom
+version: '1.3'
+author: zPleum
+description: Made On Earth By Human, By zPleum, THIS IS MY COPYRIGHT
+website: https://wiraphat.onrender.com/
+main: me.zpleum.zMushroom.ZMushroom
+api-version: '1.21'
+
+commands:
+  zmushroom:
+    description: Reloads the plugin configuration and cooldowns.
+    usage: /zmushroom reload
+    permission: zmushroom.reload
+    permission-message: You do not have permission to use this command.
+permissions:
+  zmushroom.reload:
+    description: Allows the player to reload the plugin configuration.
+    default: op
