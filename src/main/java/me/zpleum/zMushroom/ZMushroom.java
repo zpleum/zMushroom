@@ -112,12 +112,12 @@ public final class ZMushroom extends JavaPlugin implements Listener {
         getLogger().info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
-        getLogger().info("!!!!!!!!!!!! zMushroom 1.0 has been disabled! !!!!!!!!!!!!");
+        getLogger().info("!!!!!!!!!!!! zMushroom 1.3 has been disabled! !!!!!!!!!!!!");
         getLogger().info("!!!!!!!!!!!!!!!!!!!!!! SEE YOU SOON !!!!!!!!!!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
         getLogger().info("!!!!!!!!!!!!! Plugin Developing By zPleum ! !!!!!!!!!!!!!");
-        getLogger().info("!!!!!!!!!!!!! This Version Is Latest (1.0) !!!!!!!!!!!!!!");
+        getLogger().info("!!!!!!!!!!!!! This Version Is Latest (1.3) !!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
         getLogger().info("!!!!!!!!!!!!! Contact HTTPS://WIRAPHAT.ONRENDER.COM !!!!!!!!!!!!!");
@@ -315,8 +315,8 @@ public final class ZMushroom extends JavaPlugin implements Listener {
             }
         }
 
-        // เช็คว่า Furniture ถูกใช้งานไปแล้วหรือไม่
-        if ((Boolean)this.blockInUse.getOrDefault(blockLocation, false)) {
+        this.handleOtherPlayerInteracting(player, blockLocation);
+        if ((Boolean) this.blockInUse.getOrDefault(blockLocation, false)) {
             return;
         }
 
@@ -326,6 +326,20 @@ public final class ZMushroom extends JavaPlugin implements Listener {
                     this.getConfig().getString("harvest-messages.already-harvesting-subtitle", "§eYou are already harvesting another herb!"),
                     10, 70, 20
             );
+
+            // เล่นเสียง Villager Celebrate
+            String consoleCommand = this.getConfig().getString("failed-command.2");
+
+            if (consoleCommand != null && !consoleCommand.isEmpty()) {
+                final String formattedCommand = consoleCommand.replace("%player%", player.getName());
+                getServer().getScheduler().runTask(this, () -> {
+                    try {
+                        getServer().dispatchCommand(getServer().getConsoleSender(), formattedCommand);
+                    } catch (Exception e) {
+                        getLogger().warning("Error executing console command: " + e.getMessage());
+                    }
+                });
+            }
             return;
         }
 
@@ -336,6 +350,20 @@ public final class ZMushroom extends JavaPlugin implements Listener {
                 String cooldownSubtitle = this.getConfig().getString("harvest-messages.cooldown-subtitle", "§eเหลือเวลา: %time%")
                         .replace("%time%", this.formatCooldownTime(timeLeftInMillis));
                 player.sendTitle(cooldownTitle, cooldownSubtitle, 10, 70, 20);
+
+                // เล่นเสียง Villager No
+                String consoleCommand = this.getConfig().getString("failed-command.1");
+
+                if (consoleCommand != null && !consoleCommand.isEmpty()) {
+                    final String formattedCommand = consoleCommand.replace("%player%", player.getName());
+                    getServer().getScheduler().runTask(this, () -> {
+                        try {
+                            getServer().dispatchCommand(getServer().getConsoleSender(), formattedCommand);
+                        } catch (Exception e) {
+                            getLogger().warning("Error executing console command: " + e.getMessage());
+                        }
+                    });
+                }
                 return;
             }
         }
@@ -483,6 +511,21 @@ public final class ZMushroom extends JavaPlugin implements Listener {
             if (event.getFrom().distance(event.getTo()) > 0.1) {
                 this.sendTitleSafe(player, this.getConfig().getString("harvest-messages.move-title", "§cYou moved!"), this.getConfig().getString("harvest-messages.move-subtitle", "§eHarvest cancelled!"));
                 this.cancelHarvest(player, blockLocation);
+
+                // เล่นเสียง Villager No
+                String consoleCommand = this.getConfig().getString("failed-command.1");
+
+                if (consoleCommand != null && !consoleCommand.isEmpty()) {
+                    final String formattedCommand = consoleCommand.replace("%player%", player.getName());
+                    getServer().getScheduler().runTask(this, () -> {
+                        try {
+                            getServer().dispatchCommand(getServer().getConsoleSender(), formattedCommand);
+                        } catch (Exception e) {
+                            getLogger().warning("Error executing console command: " + e.getMessage());
+                        }
+                    });
+                }
+                return;
             }
         }
 

@@ -51,19 +51,23 @@ harvest-messages:
   already-harvesting-title: "§cคุณเก็บเห็ดได้ทีละต้นเท่านั้นนะ!"
   already-harvesting-subtitle: "§eคุณกำลังเก็บเห็ดอีกต้นอยู่แล้ว!"
   active-player-title: "§cมีคุณกำลังเก็บเห็ดต้นนี้อยู่แล้ว!"
-  active-player-subtitle: "§eผู้เล่นที่กําลังเก็บเกี่ยว %player%"
+  active-player-subtitle: "§eผู้เล่นที่กําลังเก็บเกี่ยว §f%player%"
   move-title: "§cคุณเผลอทำเห็ดหลุดมือ!"
   move-subtitle: "§eการเก็บเห็ดถูกยกเลิก! น่าเสียดาย"
 
+failed-command:
+  1: "zsm play minecraft:entity.villager.no %player%"
+  2: "zsm play minecraft:entity.villager.celebrate %player%"
+
 custom-sound:
-    console-command:
-      enabled: true
-      5: "zsm play minecraft:block.note_block.pling %player%"
-      4: "zsm play minecraft:block.note_block.pling %player%"
-      3: "zsm play minecraft:block.note_block.pling %player%"
-      2: "zsm play minecraft:block.note_block.pling %player%"
-      1: "zsm play minecraft:block.note_block.pling %player%"
-      0: "zsm play minecraft:block.note_block.bell %player%"
+  console-command:
+    enabled: true
+    5: "zsm play minecraft:block.note_block.pling %player%"
+    4: "zsm play minecraft:block.note_block.pling %player%"
+    3: "zsm play minecraft:block.note_block.pling %player%"
+    2: "zsm play minecraft:block.note_block.pling %player%"
+    1: "zsm play minecraft:block.note_block.pling %player%"
+    0: "zsm play minecraft:block.note_block.bell %player%"
 
 messages:
   reload-success: "ตั้งค่าและคูลดาวน์โหลดใหม่เรียบร้อยแล้ว!"
