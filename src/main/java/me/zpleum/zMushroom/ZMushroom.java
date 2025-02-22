@@ -79,12 +79,12 @@ public final class ZMushroom extends JavaPlugin implements Listener {
         getLogger().info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
-        getLogger().info("!!!!!!!!!!!! zMushroom 1.0 has been enabled! !!!!!!!!!!!!");
+        getLogger().info("!!!!!!!!!!!! zMushroom 1.3 has been enabled! !!!!!!!!!!!!");
         getLogger().info("!!!!!!!!!!!!!!!!!!!!! HAVE A GOOD DAY !!!!!!!!!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
         getLogger().info("!!!!!!!!!!!!! Plugin Developing By zPleum ! !!!!!!!!!!!!!");
-        getLogger().info("!!!!!!!!!!!!! This Version Is Latest (1.0) !!!!!!!!!!!!!!");
+        getLogger().info("!!!!!!!!!!!!! This Version Is Latest (1.3) !!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
         getLogger().info("!!!!!!!!!!!!! Contact HTTPS://WIRAPHAT.ONRENDER.COM !!!!!!!!!!!!!");
