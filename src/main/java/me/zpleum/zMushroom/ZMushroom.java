@@ -15,6 +15,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.entity.Display.Billboard;
@@ -291,9 +292,16 @@ public final class ZMushroom extends JavaPlugin implements Listener {
         Entity entity = event.getRightClicked(); // ดึง Entity ที่ถูกคลิก
 
         // ตรวจสอบว่าเป็น CustomFurniture ของ ItemsAdder หรือไม่
-        CustomFurniture furniture = CustomFurniture.byAlreadySpawned(entity);
-        if (furniture == null) {
-            return; // ถ้าไม่ใช่เฟอร์นิเจอร์จาก ItemsAdder ให้หยุดทำงาน
+        CustomFurniture furniture;
+        try {
+            furniture = CustomFurniture.byAlreadySpawned(entity);
+            if (furniture == null) {
+                return; // ถ้าไม่ใช่เฟอร์นิเจอร์จาก ItemsAdder ให้หยุดทำงาน
+            }
+        } catch (RuntimeException e) {
+            // ถ้าเกิด error เมื่อพยายามเรียก CustomFurniture.byAlreadySpawned
+            // เช่น entity เป็น PIG ซึ่งไม่สามารถเป็น furniture ได้
+            return;
         }
 
         String furnitureId = furniture.getNamespacedID(); // ดึง Namespaced ID ของ ItemsAdder
