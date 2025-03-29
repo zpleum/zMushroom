@@ -1,30 +1,42 @@
 ### SYSTEM BY ZPLEUM SUD XAO ###
 
 countdown-time: 5
-enable-world: "Sakura"
+enable-world: "mushm"
 
 materials:
-  workshop_six:red_mushroom_patch_large:
-    command: "mmoitems give MATERIAL MUSHROOM_LV3 %player% 1 0 100 0 silent"
+  # ยากมาก Yellow
+  workshop_six:glow_mushroom_patch_large:
+    command: "mmoitems give MATERIAL MUSHROOM_LV4 %player% 1 0 100 0 silent"
     cooldown-time: 10
     success-rate: 50.0
-  workshop_six:red_mushroom_patch:
-    command: "mmoitems give MATERIAL MUSHROOM_LV3 %player% 1 0 100 0 silent"
+  workshop_six:glow_mushroom_patch:
+    command: "mmoitems give MATERIAL MUSHROOM_LV4 %player% 1 0 100 0 silent"
     cooldown-time: 10
     success-rate: 55.0
-  workshop_six:glow_mushroom_patch_large:
+  # ยาก Orange
+  workshop_six:orange_mushroom_patch_large:
+    command: "mmoitems give MATERIAL MUSHROOM_LV3 %player% 1 0 100 0 silent"
+    cooldown-time: 8
+    success-rate: 50.0
+  workshop_six:orange_mushroom_patch:
+    command: "mmoitems give MATERIAL MUSHROOM_LV3 %player% 1 0 100 0 silent"
+    cooldown-time: 8
+    success-rate: 50.0
+  # กลาง Red
+  workshop_six:red_mushroom_patch_large:
     command: "mmoitems give MATERIAL MUSHROOM_LV2 %player% 1 0 100 0 silent"
     cooldown-time: 5
     success-rate: 65.0
-  workshop_six:glow_mushroom_patch:
+  workshop_six:red_mushroom_patch:
     command: "mmoitems give MATERIAL MUSHROOM_LV2 %player% 1 0 100 0 silent"
     cooldown-time: 5
     success-rate: 70.0
-  workshop_six:orange_mushroom_patch_large:
+  # ง่าย Brown
+  workshop_six:brown_mushroom_patch_large:
     command: "mmoitems give MATERIAL MUSHROOM_LV1 %player% 1 0 100 0 silent"
     cooldown-time: 3
     success-rate: 80.0
-  workshop_six:orange_mushroom_patch:
+  workshop_six:brown_mushroom_patch:
     command: "mmoitems give MATERIAL MUSHROOM_LV1 %player% 1 0 100 0 silent"
     cooldown-time: 3
     success-rate: 85.0
@@ -56,21 +68,21 @@ harvest-messages:
   move-subtitle: "§eการเก็บเห็ดถูกยกเลิก! น่าเสียดาย"
 
 failed-command:
-  1: "zsm play minecraft:entity.villager.no %player%"
-  2: "zsm play minecraft:entity.villager.celebrate %player%"
+  1: "playsound mminecraft:entity.villager.no player %player% %player_x% %player_y% %player_z%"
+  2: "playsound minecraft:entity.villager.celebrate player %player% %player_x% %player_y% %player_z%"
 
 custom-sound:
   console-command:
     enabled: true
-    5: "zsm play minecraft:block.note_block.pling %player%"
-    4: "zsm play minecraft:block.note_block.pling %player%"
-    3: "zsm play minecraft:block.note_block.pling %player%"
-    2: "zsm play minecraft:block.note_block.pling %player%"
-    1: "zsm play minecraft:block.note_block.pling %player%"
-    0: "zsm play minecraft:block.note_block.bell %player%"
+    5: "playsound minecraft:block.note_block.pling player %player% %player_x% %player_y% %player_z%"
+    4: "playsound minecraft:block.note_block.pling player %player% %player_x% %player_y% %player_z%"
+    3: "playsound minecraft:block.note_block.pling player %player% %player_x% %player_y% %player_z%"
+    2: "playsound minecraft:block.note_block.pling player %player% %player_x% %player_y% %player_z%"
+    1: "playsound minecraft:block.note_block.pling player %player% %player_x% %player_y% %player_z%"
+    0: "playsound minecraft:block.note_block.bell player %player% %player_x% %player_y% %player_z%"
 
 messages:
-  reload-success: "ตั้งค่าและคูลดาวน์โหลดใหม่เรียบร้อยแล้ว!"
+  reload-success: "ทำการรีโหลด Config และการตั้งค่าสำเร็จ!"
   reload-usage: "§cAn internal error occurred while attempting to perform this command."
   no-hologram: "§cAn internal error occurred while attempting to perform this command."
 

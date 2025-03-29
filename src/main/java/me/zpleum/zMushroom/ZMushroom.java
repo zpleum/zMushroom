@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import dev.lone.itemsadder.api.CustomFurniture;
+import dev.lone.itemsadder.api.Events.FurnitureBreakEvent;
 import dev.lone.itemsadder.api.Events.FurniturePlaceEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,15 +16,15 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.TextDisplay;
+import org.bukkit.entity.*;
 import org.bukkit.entity.Display.Billboard;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,7 +32,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -80,12 +80,12 @@ public final class ZMushroom extends JavaPlugin implements Listener {
         getLogger().info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
-        getLogger().info("!!!!!!!!!!!! zMushroom 1.3 has been enabled! !!!!!!!!!!!!");
+        getLogger().info("!!!!!!!!!!!! zMushroom 1.4-Beta has been enabled! !!!!!!!!!!!!");
         getLogger().info("!!!!!!!!!!!!!!!!!!!!! HAVE A GOOD DAY !!!!!!!!!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
         getLogger().info("!!!!!!!!!!!!! Plugin Developing By zPleum ! !!!!!!!!!!!!!");
-        getLogger().info("!!!!!!!!!!!!! This Version Is Latest (1.3) !!!!!!!!!!!!!!");
+        getLogger().info("!!!!!!!!!!!!! This Version Is Latest (1.4-Beta) !!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
         getLogger().info("!!!!!!!!!!!!! Contact HTTPS://WIRAPHAT.ONRENDER.COM !!!!!!!!!!!!!");
@@ -113,12 +113,12 @@ public final class ZMushroom extends JavaPlugin implements Listener {
         getLogger().info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
-        getLogger().info("!!!!!!!!!!!! zMushroom 1.3 has been disabled! !!!!!!!!!!!!");
+        getLogger().info("!!!!!!!!!!!! zMushroom 1.4-Beta has been disabled! !!!!!!!!!!!!");
         getLogger().info("!!!!!!!!!!!!!!!!!!!!!! SEE YOU SOON !!!!!!!!!!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
         getLogger().info("!!!!!!!!!!!!! Plugin Developing By zPleum ! !!!!!!!!!!!!!");
-        getLogger().info("!!!!!!!!!!!!! This Version Is Latest (1.3) !!!!!!!!!!!!!!");
+        getLogger().info("!!!!!!!!!!!!! This Version Is Latest (1.4-Beta) !!!!!!!!!!!!!!");
         getLogger().info("");
         getLogger().info("");
         getLogger().info("!!!!!!!!!!!!! Contact HTTPS://WIRAPHAT.ONRENDER.COM !!!!!!!!!!!!!");
@@ -196,7 +196,10 @@ public final class ZMushroom extends JavaPlugin implements Listener {
                     String consoleCommand = ZMushroom.this.getConfig().getString(commandKey, "");
 
                     if (consoleCommand != null && !consoleCommand.isEmpty()) {
-                        String formattedCommand = consoleCommand.replace("%player%", player.getName());
+                        String formattedCommand = consoleCommand.replace("%player%", player.getName())
+                                .replace("%player_x%", String.valueOf((int)player.getLocation().getX()))
+                                .replace("%player_y%", String.valueOf((int)player.getLocation().getY()))
+                                .replace("%player_z%", String.valueOf((int)player.getLocation().getZ()));
                         Bukkit.getScheduler().runTask(ZMushroom.this, () -> {
                             try {
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), formattedCommand);
@@ -225,17 +228,26 @@ public final class ZMushroom extends JavaPlugin implements Listener {
                         this.cancel();
                         return;
                     }
-
+                    
                     // สุ่มโอกาสสำเร็จ
                     double random = Math.random() * 100;
                     if (random <= successRate) {
-                        // สำเร็จ
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", player.getName()));
+                        // แทนที่ค่าตัวแปรใน command ก่อน
+                        String processedCommand = command
+                                .replace("%player%", player.getName())
+                                .replace("%player_x%", String.valueOf((int) player.getLocation().getX()))
+                                .replace("%player_y%", String.valueOf((int) player.getLocation().getY()))
+                                .replace("%player_z%", String.valueOf((int) player.getLocation().getZ()));
+
+                        // เรียกใช้คำสั่งผ่าน console
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), processedCommand);
+
+                        // แสดงข้อความสำเร็จ
                         ZMushroom.this.sendTitleSafe(player,
                                 ZMushroom.this.getConfig().getString("harvest-messages.success-title", "§aSuccess!"),
                                 ZMushroom.this.getConfig().getString("harvest-messages.success-subtitle", "§eHarvest complete!"));
                     } else {
-                        // ล้มเหลว
+                        // แสดงข้อความล้มเหลว
                         ZMushroom.this.sendTitleSafe(player,
                                 ZMushroom.this.getConfig().getString("harvest-messages.fail-title", "§cFailed!"),
                                 ZMushroom.this.getConfig().getString("harvest-messages.fail-subtitle", "§eHarvest failed!"));
@@ -245,7 +257,10 @@ public final class ZMushroom extends JavaPlugin implements Listener {
                     String commandKey = "custom-sound.console-command.0";
                     String consoleCommand = ZMushroom.this.getConfig().getString(commandKey, "");
                     if (consoleCommand != null && !consoleCommand.isEmpty()) {
-                        String formattedCommand = consoleCommand.replace("%player%", player.getName());
+                        String formattedCommand = consoleCommand.replace("%player%", player.getName())
+                                .replace("%player_x%", String.valueOf((int)player.getLocation().getX()))
+                                .replace("%player_y%", String.valueOf((int)player.getLocation().getY()))
+                                .replace("%player_z%", String.valueOf((int)player.getLocation().getZ()));
                         Bukkit.getScheduler().runTask(ZMushroom.this, () -> {
                             try {
                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), formattedCommand);
@@ -339,7 +354,10 @@ public final class ZMushroom extends JavaPlugin implements Listener {
             String consoleCommand = this.getConfig().getString("failed-command.2");
 
             if (consoleCommand != null && !consoleCommand.isEmpty()) {
-                final String formattedCommand = consoleCommand.replace("%player%", player.getName());
+                final String formattedCommand = consoleCommand.replace("%player%", player.getName())
+                        .replace("%player_x%", String.valueOf((int)player.getLocation().getX()))
+                        .replace("%player_y%", String.valueOf((int)player.getLocation().getY()))
+                        .replace("%player_z%", String.valueOf((int)player.getLocation().getZ()));
                 getServer().getScheduler().runTask(this, () -> {
                     try {
                         getServer().dispatchCommand(getServer().getConsoleSender(), formattedCommand);
@@ -363,7 +381,10 @@ public final class ZMushroom extends JavaPlugin implements Listener {
                 String consoleCommand = this.getConfig().getString("failed-command.1");
 
                 if (consoleCommand != null && !consoleCommand.isEmpty()) {
-                    final String formattedCommand = consoleCommand.replace("%player%", player.getName());
+                    final String formattedCommand = consoleCommand.replace("%player%", player.getName())
+                            .replace("%player_x%", String.valueOf((int)player.getLocation().getX()))
+                            .replace("%player_y%", String.valueOf((int)player.getLocation().getY()))
+                            .replace("%player_z%", String.valueOf((int)player.getLocation().getZ()));
                     getServer().getScheduler().runTask(this, () -> {
                         try {
                             getServer().dispatchCommand(getServer().getConsoleSender(), formattedCommand);
@@ -484,32 +505,31 @@ public final class ZMushroom extends JavaPlugin implements Listener {
         }
     }
 
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-        Location location = event.getBlock().getLocation();
-        Material material = event.getBlock().getType();
-        ConfigurationSection materials = this.getConfig().getConfigurationSection("materials");
-        if (materials != null && materials.contains(material.toString())) {
-            event.setCancelled(true);
-        } else {
-            if (this.holograms.containsKey(location)) {
-                TextDisplay hologram = (TextDisplay)this.holograms.remove(location);
-                if (!hologram.isDead()) {
-                    hologram.remove();
-                }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onFurnitureBreak(FurnitureBreakEvent event) {
+        CustomFurniture furniture = event.getFurniture();
+        if (furniture == null) return;
+
+        Location location = furniture.getEntity().getLocation().clone().add(-0.5, 0, -0.5);
+
+        // ทำความสะอาดข้อมูล
+        if (this.holograms.containsKey(location)) {
+            TextDisplay hologram = (TextDisplay) this.holograms.remove(location);
+            if (!hologram.isDead()) {
+                hologram.remove();
             }
+        }
 
-            this.cooldownManager.removeCooldown(location);
-            this.hologramData.set(this.locationToString(location), (Object)null);
+        this.cooldownManager.removeCooldown(location);
+        this.hologramData.set(this.locationToString(location), null);
 
-            try {
-                this.hologramData.save(this.hologramDataFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+        try {
+            this.hologramData.save(this.hologramDataFile);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -524,7 +544,11 @@ public final class ZMushroom extends JavaPlugin implements Listener {
                 String consoleCommand = this.getConfig().getString("failed-command.1");
 
                 if (consoleCommand != null && !consoleCommand.isEmpty()) {
-                    final String formattedCommand = consoleCommand.replace("%player%", player.getName());
+                    final String formattedCommand = consoleCommand.replace("%player%", player.getName())
+                            .replace("%player_x%", String.valueOf((int)player.getLocation().getX()))
+                            .replace("%player_y%", String.valueOf((int)player.getLocation().getY()))
+                            .replace("%player_z%", String.valueOf((int)player.getLocation().getZ()));
+
                     getServer().getScheduler().runTask(this, () -> {
                         try {
                             getServer().dispatchCommand(getServer().getConsoleSender(), formattedCommand);
