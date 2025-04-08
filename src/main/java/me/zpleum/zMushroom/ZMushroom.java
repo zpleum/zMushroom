@@ -228,7 +228,7 @@ public final class ZMushroom extends JavaPlugin implements Listener {
                         this.cancel();
                         return;
                     }
-                    
+
                     // สุ่มโอกาสสำเร็จ
                     double random = Math.random() * 100;
                     if (random <= successRate) {
@@ -239,13 +239,30 @@ public final class ZMushroom extends JavaPlugin implements Listener {
                                 .replace("%player_y%", String.valueOf((int) player.getLocation().getY()))
                                 .replace("%player_z%", String.valueOf((int) player.getLocation().getZ()));
 
-                        // เรียกใช้คำสั่งผ่าน console
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), processedCommand);
+                        // เพิ่มการ log เพื่อดูว่ากำลังรันคำสั่งอะไร
+                        ZMushroom.this.getLogger().info("Running command: " + processedCommand + " for player: " + player.getName());
 
-                        // แสดงข้อความสำเร็จ
-                        ZMushroom.this.sendTitleSafe(player,
-                                ZMushroom.this.getConfig().getString("harvest-messages.success-title", "§aSuccess!"),
-                                ZMushroom.this.getConfig().getString("harvest-messages.success-subtitle", "§eHarvest complete!"));
+                        // ทำการรันคำสั่งในแบบ async เพื่อไม่ให้เกิดการค้าง
+                        Bukkit.getScheduler().runTask(ZMushroom.this, () -> {
+                            try {
+                                boolean success = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), processedCommand);
+                                if (!success) {
+                                    ZMushroom.this.getLogger().warning("Command failed to execute: " + processedCommand);
+                                }
+
+                                // แสดงข้อความสำเร็จ - ย้ายมาไว้ในนี้เพื่อให้แน่ใจว่าจะแสดงหลังจากที่คำสั่งทำงานเสร็จแล้ว
+                                ZMushroom.this.sendTitleSafe(player,
+                                        ZMushroom.this.getConfig().getString("harvest-messages.success-title", "§aSuccess!"),
+                                        ZMushroom.this.getConfig().getString("harvest-messages.success-subtitle", "§eHarvest complete!"));
+
+                            } catch (Exception e) {
+                                ZMushroom.this.getLogger().warning("Error executing command: " + e.getMessage());
+                                // แสดงข้อความล้มเหลวในกรณีที่เกิด error
+                                ZMushroom.this.sendTitleSafe(player,
+                                        ZMushroom.this.getConfig().getString("harvest-messages.fail-title", "§cFailed!"),
+                                        ZMushroom.this.getConfig().getString("harvest-messages.fail-subtitle", "§eHarvest failed!"));
+                            }
+                        });
                     } else {
                         // แสดงข้อความล้มเหลว
                         ZMushroom.this.sendTitleSafe(player,
@@ -300,11 +317,17 @@ public final class ZMushroom extends JavaPlugin implements Listener {
             this.blockInUse.put(blockLocation, false);
         }
     }
-
+    
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractAtEntityEvent event) {
         Player player = event.getPlayer();
         Entity entity = event.getRightClicked(); // ดึง Entity ที่ถูกคลิก
+
+        // ตรวจสอบโลกที่เล่นอยู่ว่าตรงกับที่กำหนดใน config หรือไม่
+        String enabledWorld = this.getConfig().getString("enable-world", "");
+        if (!enabledWorld.isEmpty() && !player.getWorld().getName().equalsIgnoreCase(enabledWorld)) {
+            return; // ถ้าอยู่ในโลกที่ไม่ได้กำหนด ให้หยุดทำงานทันที
+        }
 
         // ตรวจสอบว่าเป็น CustomFurniture ของ ItemsAdder หรือไม่
         CustomFurniture furniture;
@@ -329,12 +352,8 @@ public final class ZMushroom extends JavaPlugin implements Listener {
 
         if (!player.isSneaking()) {
             Location location = entity.getLocation().clone().add(-0.5, 0, -0.5);
-
-            String enabledWorld = this.getConfig().getString("enable-world", "");
-            if (location.getWorld().getName().equalsIgnoreCase(enabledWorld)) {
-                if (!this.holograms.containsKey(location)) {
-                    this.createHologram(location, false);
-                }
+            if (!this.holograms.containsKey(location)) {
+                this.createHologram(location, false);
             }
         }
 
