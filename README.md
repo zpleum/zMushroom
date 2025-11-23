@@ -1,79 +1,113 @@
+Got you. I’ll clean it up, make it sleek, readable, and professional — but still punchy.
+
+---
+
 # **🍄 ZMushroom — Interactive Harvesting System (v1.4 Full Version)**
 
-```markdown
-# 🍄 ZMushroom — Interactive Harvesting System (v1.4 Full Version)
+A fully–modular harvesting system built for modern Minecraft servers.
 
-An immersive and fully interactive harvesting system for Minecraft servers.  
-Designed for RPG, Survival, and MMO-style gameplay with custom cooldowns, holograms, and ItemsAdder support.
+Designed for RPG, Survival, and MMO servers that want an immersive, animated, and customizable gathering experience — with cooldowns, holograms, ItemsAdder support, and anti-exploit logic baked in.
 
 ---
 
-## ✨ Features
+## **✨ Key Features**
 
-### 🎯 Right-Click to Harvest
-Players can harvest specific blocks simply by right-clicking.  
-A configurable countdown timer adds immersion and prevents spam interactions.
+### **🎯 Right-Click to Harvest**
 
-### 🌟 Custom 3D Mushroom Model
-Integrated with **ItemsAdder API** to display a fully custom 3D mushroom or any custom model you define.
+Players harvest by simply right-clicking the configured block.
+A built-in countdown prevents spam and boosts immersion.
 
-### 🔮 Dynamic Holograms (TextDisplay)
-Floating holograms indicate:
-- 🟢 **Ready**
-- 🔴 **Cooldown**
+---
 
-Uses **TextDisplay** instead of ArmorStands for better performance.
+### **🌟 Custom 3D Mushroom Models (ItemsAdder)**
 
-### ⏳ Cooldown System
-Each block type can have its own cooldown time with full persistence across restarts.
+Seamless **ItemsAdder** integration.
+Use any custom 3D model — mushrooms, plants, crystals, whatever you want.
 
-### 🛡️ Anti-Abuse Protection
-- Prevents multiple players from harvesting the same block  
-- Cancels harvesting if the player moves  
-- Prevents macro or autoclick exploits
+---
 
-### 🌍 World & Material Filtering
-Enable harvesting only in specific worlds  
-Allow only selected block materials to be harvestable
+### **🔮 Dynamic Holograms (TextDisplay)**
 
-### 🎵 Fully Customizable Feedback
-Customizable:
-- Titles
-- Subtitles
-- Holograms
-- Sounds
-- Command rewards
-- Countdown effects
+Lightweight holograms showing:
 
-### 💾 Persistent Storage
-All holograms and cooldown timers are stored in `holograms.yml`, restoring perfectly after restarts.
+* 🟢 **Ready**
+* 🔴 **Cooldown**
 
-### 📝 Commands
+Uses **TextDisplay**, not ArmorStands → better server performance.
+
+---
+
+### **⏳ Per-Block Cooldowns**
+
+Each material can have:
+
+* Its own cooldown time
+* Custom commands
+* Individual success rates
+* Fully persistent state across restarts
+
+---
+
+### **🛡️ Anti-Abuse Smart System**
+
+* Only one player can harvest a block at a time
+* Cancels if player moves
+* Blocks macro / auto-click spam
+* Prevents multi-interactions on the same node
+
+---
+
+### **🌍 World & Material Filtering**
+
+Enable harvesting only in specific worlds
+Define exactly which ItemsAdder models can be harvested
+
+---
+
+### **🎵 Fully Customizable Feedback**
+
+Adjust everything to your server style:
+
+* Titles
+* Subtitles
+* Actionbar countdown
+* Sounds
+* Commands
+* Holograms
+
+---
+
+### **💾 Persistent Storage**
+
+All holograms + cooldown data stored in `holograms.yml`
+Restores exactly after server restarts.
+
+---
+
+## **📝 Commands**
 
 ```
-
 /zmushroom reload
+```
 
-````
-
-Reloads configuration and cooldown data without restarting the server.
+Reloads config + cooldown state without restarting the server.
 
 ---
 
-## 📦 Installation
+## **📦 Installation**
 
-1. Drop the plugin `.jar` into `/plugins`
-2. Install and configure **ItemsAdder**
+1. Put the `.jar` into `/plugins`
+2. Ensure **ItemsAdder** is installed & loaded
 3. Restart your server
-4. Edit `config.yml` to your liking
-5. Use `/zmushroom reload` when modifying the config
+4. Edit `config.yml`
+5. Run `/zmushroom reload` after changes
 
 ---
 
-## ⚙️ Example Configuration
+## **⚙️ Example Configuration**
 
 ```yaml
-### SYSTEM BY ZPLEUM SUD XAO ###
+### VERSION 1.4-Beta
 
 countdown-time: 5
 enable-world: "mushm"
@@ -120,12 +154,12 @@ materials:
     success-rate: 85.0
 
 hologram:
-  ready: "§aเห็ดพร้อมเก็บเกี่ยวแล้ว!"
-  cooldown: "§cเห็ดกำลังโต! กรุณารอสักครู่"
+  ready: "§aMushroom is ready!"
+  cooldown: "§cGrowing... Please wait."
 
 harvest-messages:
   countdown-title: "§e%time%"
-  countdown-subtitle: "§aคุณกำลังเก็บเห็ด อดทนหน่อยนะ"
+  countdown-subtitle: "§aHarvesting..."
 
   countdown:
     5: "&c"
@@ -134,22 +168,22 @@ harvest-messages:
     2: "&a&c"
     1: "&a&c"
 
-  success-title: "§aคุณได้ทำการเก็บเห็ดแล้ว!"
-  success-subtitle: "§eอย่าเผลอกินเข้าไปล่ะ!"
-  fail-title: "§cคุณเผลอทำเห็ดหลุดมือ!"
-  fail-subtitle: "§eคราวหลังก็ระวังด้วยล่ะ!"
+  success-title: "§aHarvest complete!"
+  success-subtitle: "§eDon't eat it (probably)."
+  fail-title: "§cOops! You dropped it!"
+  fail-subtitle: "§eBe careful next time."
 
-  cooldown-title: "§cเห็ดกำลังโต! กลับมาในภายหลังนะ"
-  cooldown-subtitle: "§eเห็ดจะโตในอีก: %time%"
+  cooldown-title: "§cStill growing..."
+  cooldown-subtitle: "§eBack in: %time%"
 
-  already-harvesting-title: "§cคุณเก็บเห็ดได้ทีละต้นเท่านั้นนะ!"
-  already-harvesting-subtitle: "§eคุณกำลังเก็บเห็ดอีกต้นอยู่แล้ว!"
+  already-harvesting-title: "§cYou’re already harvesting!"
+  already-harvesting-subtitle: "§eFinish the current mushroom first."
 
-  active-player-title: "§cมีคุณกำลังเก็บเห็ดต้นนี้อยู่แล้ว!"
-  active-player-subtitle: "§eผู้เล่นที่กําลังเก็บเกี่ยว §f%player%"
+  active-player-title: "§cSomeone is harvesting this already!"
+  active-player-subtitle: "§eCurrent player: §f%player%"
 
-  move-title: "§cคุณเผลอทำเห็ดหลุดมือ!"
-  move-subtitle: "§eการเก็บเห็ดถูกยกเลิก! น่าเสียดาย"
+  move-title: "§cYou moved!"
+  move-subtitle: "§eHarvest cancelled."
 
 failed-command:
   1: "playsound minecraft:entity.villager.no player %player% %player_x% %player_y% %player_z%"
@@ -166,12 +200,12 @@ custom-sound:
     0: "playsound minecraft:block.note_block.bell player %player% %player_x% %player_y% %player_z%"
 
 messages:
-  reload-success: "ทำการรีโหลด Config และการตั้งค่าสำเร็จ!"
-  reload-usage: "§cAn internal error occurred while attempting to perform this command."
-  no-hologram: "§cAn internal error occurred while attempting to perform this command."
+  reload-success: "Reload complete!"
+  reload-usage: "§cAn internal error occurred."
+  no-hologram: "§cHologram data not found."
 
-### SYSTEM BY ZPLEUM SUD XAO ###
-````
+# © 2025 zPleum. Licensed under MIT License. | https://zpleum.site/
+```
 
 ---
 
