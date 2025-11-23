@@ -1,4 +1,4 @@
-### SYSTEM BY ZPLEUM SUD XAO ###
+### VERSION 1.4-Beta
 
 countdown-time: 5
 enable-world: "mushm"
@@ -86,4 +86,5 @@ messages:
   reload-usage: "§cAn internal error occurred while attempting to perform this command."
   no-hologram: "§cAn internal error occurred while attempting to perform this command."
 
-### SYSTEM BY ZPLEUM SUD XAO ###
+# © 2025 zPleum. Licensed under MIT License. | https://zpleum.site/
+
